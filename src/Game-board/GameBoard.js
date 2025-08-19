@@ -4,6 +4,8 @@ import { Cards } from "../Components/Cards";
 import { CountDownTimer } from "../Components/CountDownTimer";
 import { cardList } from "../Utils/data";
 import { ShuffleCards } from "../Utils/ShuffleCards";
+import { LoadPage } from "../Components/LoadPage";
+import { Button } from "../Components/Button";
 
 const shuffledCard = ShuffleCards(cardList);
 
@@ -60,10 +62,6 @@ const GameBoard = (props) => {
     setIsRunning(true);
   }, []);
 
-  const handlePause = React.useCallback((e) => {
-    setIsRunning(false);
-  }, []);
-
   const handleReset = React.useCallback((e) => {
     setIsRunning(false);
     setCards(shuffledCard);
@@ -86,15 +84,12 @@ const GameBoard = (props) => {
       )
     );
   }, [visibleCardId, handleCardClick, cards]);
-
   return (
     <div className="tc-game-board-container">
       <div className="tc-game-board-header-container">
         <Points points={points} />
         <div>
-          <button onClick={handleStart}>Start</button>
-          <button onClick={handlePause}>Pause</button>
-          <button onClick={handleReset}>Reset</button>
+          <Button onClick={handleReset} label={"Reset"} />
         </div>
         <CountDownTimer
           initialTime={initialTime}
@@ -102,7 +97,7 @@ const GameBoard = (props) => {
           onComplete={handleTimeComplete}
         />
       </div>
-      {renderCards}
+      {isRunning ? renderCards : <LoadPage onClick={handleStart} />}
     </div>
   );
 };
